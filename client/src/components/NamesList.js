@@ -1,5 +1,7 @@
 import React from 'react';
 
+import NameButton from './NameButton';
+
 class NamesList extends React.Component {
 
     constructor(props) {
@@ -10,7 +12,6 @@ class NamesList extends React.Component {
     componentDidMount() {
         this.props.socket.on('updated users', (usernames) => {
             this.setState({ names: usernames })
-            console.log(this.state.names);
         });
     }
     
@@ -18,11 +19,11 @@ class NamesList extends React.Component {
     render() { 
         const listItems = this.state.names.map(
             (name) => {
-                return <li>{name}</li>
+                return <NameButton name={name} socket={this.props.socket} />
             }
         )
         return (
-            <div><ul>{listItems}</ul></div>
+            <div>{listItems}</div>
         )
      }
 }

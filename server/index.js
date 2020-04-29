@@ -15,7 +15,10 @@ app.use(router);
 
 server.listen(PORT, () => console.log(`Started on port ${PORT}`));
 
-let users = [];
+let usersInMain = {};
+let numGames = -1;
+let games = [];
+
 
 io.on('connection', (socket) => {
     console.log(`Connection: ${socket.id}`);
@@ -27,26 +30,42 @@ io.on('connection', (socket) => {
     });
 
     socket.on('register user', (username) => {
-        let user = {};
-        user[socket.id] = username;
-        users.push(user);
+        if (!usersInMain.hasOwnProperty(socket.id)) {
+            usersInMain[socket.id] = username;
+        }
+        socket.join('main');
         io.to(socket.id).emit('successful registration');
-        io.emit('updated users', getUsernames());
+        io.to('main').emit('updated users', getUsernames());
     });
+
+    socket.on('person challenged', (username) => {
+        const id = findSocketID(username);
+        if (id != 0) {
+            if (id === socket.id) {
+                io.to(socket.id).emit('challenged self');
+                return;
+            }
+            io.to(id).emit('being challenged', usersInMain[socket.id]);
+        }
+    })
 });
 
-function getUsernames() {
-    let result = [];
-    let i;
-    for (i = 0; i < users.length; i++) {
-        result.push(Object.values(users[i])[0]);
-    }
+function findSocketID(username) {
+    let result = 0;
+    Object.keys(usersInMain).forEach(
+        (id) => {
+            if (usersInMain[id] === username) {
+                result = id;
+            }
+        }
+    )
     return result;
 }
 
+function getUsernames() {
+    return Object.values(usersInMain);
+}
+
 function removeUser(id) {
-    const index = users.findIndex((user) => Object.keys(user)[0] === id)
-    if (index >= 0) {
-        users.splice(index, 1);
-    }
+    delete usersInMain[id];
 }
