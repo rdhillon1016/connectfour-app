@@ -1,8 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import io from 'socket.io-client';
-
-const ENDPOINT = 'http://localhost:5000';
 
 
 
@@ -35,10 +32,6 @@ class JoinGame extends React.Component {
     }
 
     componentWillMount() {
-        const socket = io(ENDPOINT);
-        this.setState({ socket });
-        socket.on('connect', () => console.log(`connected: ${socket.id}`));
-        socket.emit('register user', this.props.location.state.username);
     }
 
     componentDidMount() {

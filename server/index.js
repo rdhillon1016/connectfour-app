@@ -30,6 +30,7 @@ io.on('connection', (socket) => {
         let user = {};
         user[socket.id] = username;
         users.push(user);
+        io.to(socket.id).emit('successful registration');
         io.emit('updated users', getUsernames());
     });
 });

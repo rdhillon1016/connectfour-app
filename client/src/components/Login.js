@@ -1,20 +1,33 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 
-function Login() {
-    const [name, setName] = useState('');
+class Login extends React.Component {
 
-    return (
-        <div>
-            <p>Display Name</p>
-            <input type="text" name="" onChange={(event) => setName(event.target.value)}></input>
-            <Link onClick={e => (!name) ? e.preventDefault() : null} to={
-                {pathname: '/join', state: {username: name}}
-            }>
-                <button type="submit">Begin</button>
-            </Link>
-        </div>
-    );
+    constructor(props) {
+        super(props);
+        this.state = {}
+        this.handleLoginClick = this.handleLoginClick.bind(this);
+    }
+
+    setName(name) {
+        this.setState({name});
+    }
+
+    handleLoginClick() {
+        if (!this.state.hasOwnProperty('name')) {
+            return;
+        }
+        this.props.socket.emit('register user', this.state.name);
+    }
+
+    render () {
+        return (
+            <div>
+                <p>Display Name</p>
+                <input type="text" name="" onChange={(event) => this.setName(event.target.value)}></input>
+                <button onClick={this.handleLoginClick}>Begin</button>
+            </div>
+        );
+    } 
 }
 
 export default Login;
