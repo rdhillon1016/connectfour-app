@@ -24,6 +24,14 @@ class App extends React.Component {
     socket.on('successful registration', () => {
       this.setState({view: <JoinGame socket={socket} />})
     }) 
+
+    socket.on('start game', () => {
+      this.setState({view: <Game socket = {socket} />})
+    })
+
+    socket.on('end game', () => {
+      this.setState({view: <JoinGame socket = {socket} />})
+    })
   }
 
   render () {

@@ -19,7 +19,7 @@ class NamesList extends React.Component {
     render() { 
         const listItems = this.state.names.map(
             (name) => {
-                return <NameButton name={name} socket={this.props.socket} />
+                return <NameButton key={name} name={name} socket={this.props.socket} />
             }
         )
         return (
