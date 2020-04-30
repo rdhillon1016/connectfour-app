@@ -22,6 +22,9 @@ let usersInGame = {};
 let numGames = -1;
 let games = [];
 
+const BLUE = 1;
+const RED = -1;
+
 
 io.on('connection', (socket) => {
     console.log(`Connection: ${socket.id}`);
@@ -66,6 +69,27 @@ io.on('connection', (socket) => {
         }
     })
 
+    socket.on('play turn', (move) => {
+        const row = move.row;
+        const col = move.col;
+        let game = findGame(socket.id);
+        if (game !== -1) {
+            let gameObj = game.game;
+            let turn = gameObj.turn;
+            if ((turn === BLUE && game.bluePlayer === socket.id) ||
+                (turn === RED && game.redPlayer === socket.id)) {
+                    game.playTurn(row, col);
+                    io.to(game.redPlayer).emit('update board', move);
+                    io.to(game.bluePlayer).emit('update board', move);
+                    const potentialWinner = game.checkWin();
+                    if (potentialWinner !== 0) {
+                        emitWin(game, potentialWinner);
+                        movePlayersBackToMain(game);
+                    }
+                }
+        }
+    })
+
     socket.on('accepted challenge', (username) => {
         const id = findSocketID(username);
         if (id != 0) {
@@ -91,6 +115,24 @@ io.on('connection', (socket) => {
     })
 });
 
+function emitWin(game, winner) {
+    if (winner === BLUE) {
+        io.to(game.bluePlayer).emit('end game winner', (usersInGame[game.bluePlayer].name));
+        io.to(game.redPlayer).emit('end game', (usersInGame[game.redPlayer].name));
+    } else {
+        io.to(game.redPlayer).emit('end game winner', (usersInGame[game.redPlayer].name));
+        io.to(game.bluePlayer).emit('end game', (usersInGame[game.bluePlayer].name));
+    }
+}
+
+function movePlayersBackToMain(game) {
+    removeGame(game.redPlayer);
+    usersInMain[game.redPlayer] = usersInGame[game.redPlayer].name;
+    usersInMain[game.bluePlayer] = usersInGame[game.bluePlayer].name;
+    delete usersInGame[game.redPlayer];
+    delete usersInGame[game.bluePlayer];
+}
+
 function findSocketID(username) {
     let result = 0;
     Object.keys(usersInMain).forEach(
@@ -103,9 +145,20 @@ function findSocketID(username) {
     return result;
 }
 
+function findGame(id) {
+    if (usersInGame.hasOwnProperty(id)) {
+        const gameNum = usersInGame[id].gameNum;
+        if (gameNum < games.length) {
+            return games[gameNum];
+        } 
+    }
+    return -1;
+}
+
 function removeGame(id) {
     const gameNum = usersInGame[id].gameNum;
     games.splice(gameNum, 1);
+    numGames--;
 }
 
 function findOpponent(id) {

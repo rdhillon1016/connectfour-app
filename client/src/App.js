@@ -31,6 +31,7 @@ class App extends React.Component {
 
     socket.on('end game', (username) => {
       this.setState({view: <JoinGame socket = {socket} name={username} />})
+      alert("You lost the game and you're bad")
     })
 
     socket.on('end game winner', (username) => {
