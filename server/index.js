@@ -26,21 +26,23 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', () => {
         console.log(`Disconnection: ${socket.id}`);
-        
+
         if (isUserInMain(socket.id)) {
             removeUserFromMain(socket.id);
             io.emit('updated users', getUsernames());
         } else if (isUserInGame(socket.id)) {
             let id = findOpponent(socket.id);
-            console.log(id);
             if (id != -1) {
-                const name = usersInGame[id];
+                const name = usersInGame[id].name;
                 io.to(id).emit('end game winner', name);
                 usersInMain[id] = name;
+                removeGame(id);
                 removeUserFromGame(id);
             }
             removeUserFromGame(socket.id);
         }
+
+        io.emit('updated users', getUsernames());
     });
 
     socket.on('register user', (username) => {
@@ -71,14 +73,16 @@ io.on('connection', (socket) => {
                 let gameObj = {
                     bluePlayer: socket.id,
                     redPlayer: id,
-                    
+
                 }
+                numGames++;
                 games.push(gameObj);
-                usersInGame[socket.id] = usersInMain[socket.id];
+                usersInGame[socket.id] = {name: usersInMain[socket.id], gameNum: numGames};
                 removeUserFromMain(socket.id);
-                usersInGame[id] = usersInMain[id];
+                usersInGame[id] = {name: usersInMain[id], gameNum: numGames};
                 removeUserFromMain(id);
                 io.emit('updated users', getUsernames());
+                console.log(games.length);
             }
         }
         io.to(socket.id).emit('update challenges', username);
@@ -97,19 +101,26 @@ function findSocketID(username) {
     return result;
 }
 
+function removeGame(id) {
+    const gameNum = usersInGame[id].gameNum;
+    games.splice(gameNum, 1);
+}
+
 function findOpponent(id) {
     let result = -1;
 
-    games.forEach((game) => {
-        if (game.bluePlayer === id) {
-            result = game.redPlayer;
-            return result;
+    if (usersInGame.hasOwnProperty(id)) {
+        const gameNum = usersInGame[id].gameNum;
+        if (gameNum < games.length) {
+            const game = games[gameNum];
+            if (game.bluePlayer === id) {
+                result = game.redPlayer;
+            }
+            if (game.redPlayer === id) {
+                result = game.bluePlayer;
+            }
         }
-        if (game.redPlayer === id) {
-            result = game.bluePlayer;
-            return result;
-        }
-    })
+    }
 
     return result;
 }
