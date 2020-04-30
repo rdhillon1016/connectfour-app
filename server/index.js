@@ -119,7 +119,6 @@ io.on('connection', (socket) => {
                 usersInGame[id] = { name: usersInMain[id], gameNum: numGames };
                 removeUserFromMain(id);
                 io.emit('updated users', getUsernames());
-                console.log(games.length);
             }
         }
         io.to(socket.id).emit('update challenges', username);

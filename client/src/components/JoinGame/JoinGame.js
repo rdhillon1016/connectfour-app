@@ -1,7 +1,7 @@
 import React from 'react';
 
-import NamesList from './NamesList.js';
-import ChallengesList from './ChallengesList.js'
+import NamesList from '../NamesList/NamesList.js';
+import ChallengesList from '../ChallengesList/ChallengesList.js'
 
 
 class JoinGame extends React.Component {

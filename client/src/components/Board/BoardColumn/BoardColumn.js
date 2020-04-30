@@ -1,6 +1,7 @@
 import React from 'react';
+import './BoardColumn.css';
 
-import BoardCell from './BoardCell.js';
+import BoardCell from '../BoardCell/BoardCell.js';
 
 class BoardColumn extends React.Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class BoardColumn extends React.Component {
         const socket = this.props.socket;
         socket.on(`update column ${this.props.colNum}`, (moveInfo) => {
             const row = moveInfo.row;
-            const colour = moveInfo.cell;
+            const colour = moveInfo.colour;
             if (row > -1 && row < 6) {
                 let newCellStates = [...this.state.cellStates];
                 newCellStates[row] = colour;
@@ -38,6 +39,11 @@ class BoardColumn extends React.Component {
             }
         }
         return result;
+    }
+
+    componentWillUnmount() {
+        const socket = this.props.socket;
+        socket.off(`update column ${this.props.colNum}`);
     }
 
     render() {

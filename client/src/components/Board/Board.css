@@ -1,0 +1,7 @@
+.board {
+    width: 84vh;
+    height: 72vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

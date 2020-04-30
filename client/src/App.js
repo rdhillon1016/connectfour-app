@@ -2,9 +2,9 @@ import React from 'react';
 
 import io from 'socket.io-client';
 
-import JoinGame from './components/JoinGame';
-import Game from './components/Game';
-import Login from './components/Login';
+import JoinGame from './components/JoinGame/JoinGame';
+import Game from './components/Game/Game';
+import Login from './components/Login/Login';
 
 const ENDPOINT = 'http://localhost:5000';
 

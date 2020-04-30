@@ -1,6 +1,6 @@
 import React from 'react';
 
-import NameButton from './NameButton';
+import NameButton from '../NameButton/NameButton';
 
 class NamesList extends React.Component {
 

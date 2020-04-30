@@ -17,13 +17,3 @@
     width: 12vh;
     height: 12vh;
 }
-
-.column {
-    display: inline-block;
-    width: 12vh;
-}
-
-.board {
-    width: 84vh;
-    height: 72vh;
-}

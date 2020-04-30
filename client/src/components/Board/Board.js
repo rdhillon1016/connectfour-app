@@ -1,6 +1,7 @@
 import React from 'react';
+import './Board.css';
 
-import BoardColumn from './BoardColumn.js';
+import BoardColumn from './BoardColumn/BoardColumn.js';
 
 class Board extends React.Component {
     render() {
@@ -11,7 +12,7 @@ class Board extends React.Component {
         }
 
         return (
-            <div>
+            <div className='board'>
                 {boardColumns}
             </div>
         )

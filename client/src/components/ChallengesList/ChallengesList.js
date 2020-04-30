@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChallengeButton from './ChallengeButton.js';
+import ChallengeButton from '../ChallengeButton/ChallengeButton.js';
 
 class ChallengesList extends React.Component {
     constructor(props) {
