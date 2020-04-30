@@ -1,3 +1,5 @@
+const Game = require('./Game.js');
+
 const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
@@ -73,7 +75,7 @@ io.on('connection', (socket) => {
                 let gameObj = {
                     bluePlayer: socket.id,
                     redPlayer: id,
-
+                    game: new Game()
                 }
                 numGames++;
                 games.push(gameObj);
