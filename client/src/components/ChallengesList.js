@@ -20,13 +20,19 @@ class ChallengesList extends React.Component {
         });
 
         socket.on('update challenges', (name) => {
-            let index = this.state.names.findIndex(name);
+            let index = this.state.names.findIndex((n) => n === name);
             if (index >= 0) {
                 let newNames = [...this.state.names];
                 newNames.splice(index, 1);
                 this.setState(newNames);
             }
         })
+    }
+
+    componentWillUnmount() {
+        const socket = this.props.socket;
+        socket.off('being challenged');
+        socket.off('update challenges');
     }
 
     render() { 

@@ -1,0 +1,29 @@
+.emptyCell {
+    border: solid 1px black;
+    width: 12vh;
+    height: 12vh;
+}
+
+.redCell {
+    border: solid 1px black;
+    background-color: darkred;
+    width: 12vh;
+    height: 12vh;
+}
+
+.blueCell {
+    border: solid 1px black;
+    background-color: darkblue;
+    width: 12vh;
+    height: 12vh;
+}
+
+.column {
+    display: inline-block;
+    width: 12vh;
+}
+
+.board {
+    width: 84vh;
+    height: 72vh;
+}

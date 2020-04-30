@@ -21,16 +21,21 @@ class App extends React.Component {
     socket.on('connect', () => console.log(`connected: ${socket.id}`));
     this.setState({view: <Login socket={socket} />})
 
-    socket.on('successful registration', () => {
-      this.setState({view: <JoinGame socket={socket} />})
+    socket.on('successful registration', (username) => {
+      this.setState({view: <JoinGame socket={socket} name={username} />})
     }) 
 
-    socket.on('start game', () => {
-      this.setState({view: <Game socket = {socket} />})
+    socket.on('start game', (username) => {
+      this.setState({view: <Game socket = {socket} name={username} />})
     })
 
-    socket.on('end game', () => {
-      this.setState({view: <JoinGame socket = {socket} />})
+    socket.on('end game', (username) => {
+      this.setState({view: <JoinGame socket = {socket} name={username} />})
+    })
+
+    socket.on('end game winner', (username) => {
+      this.setState({view: <JoinGame socket = {socket} name={username} />})
+      alert("You won the game you beast");
     })
   }
 

@@ -14,6 +14,11 @@ class NamesList extends React.Component {
             this.setState({ names: usernames })
         });
     }
+
+    componentWillUnmount() {
+
+        this.props.socket.off('updated users');
+    }
     
 
     render() { 

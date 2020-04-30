@@ -6,14 +6,10 @@ import ChallengesList from './ChallengesList.js'
 
 class JoinGame extends React.Component {
 
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
             <div>
-                <h1>hello</h1>
+                <h1>{this.props.name}</h1>
                 <NamesList socket={this.props.socket} />
                 <ChallengesList socket={this.props.socket} />
             </div>
@@ -25,6 +21,11 @@ class JoinGame extends React.Component {
         socket.on('challenged self', () => {
             alert("You can't challenge yourself buddy");
         });
+    }
+
+    componentWillUnmount() {
+        const socket = this.props.socket;
+        socket.off("challenged self");
     }
 }
 
