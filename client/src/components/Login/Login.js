@@ -1,10 +1,13 @@
 import React from 'react';
 
+import './Login.css';
+
 class Login extends React.Component {
 
     constructor(props) {
         super(props);
         this.handleLoginClick = this.handleLoginClick.bind(this);
+        this.state = {name: null}
     }
 
     setName(name) {
@@ -12,7 +15,7 @@ class Login extends React.Component {
     }
 
     handleLoginClick() {
-        if (!this.state.hasOwnProperty('name')) {
+        if (this.state.name === null) {
             return;
         }
         this.props.socket.emit('register user', this.state.name);
@@ -20,10 +23,13 @@ class Login extends React.Component {
 
     render () {
         return (
-            <div>
-                <p>Display Name</p>
-                <input type="text" name="" onChange={(event) => this.setName(event.target.value)}></input>
-                <button onClick={this.handleLoginClick}>Begin</button>
+            <div className='loginContainer'>
+                <div className='displayName'>Choose a Display Name</div>
+                <div className='inputContainer'>
+                    <input className='inputBox' type="text"
+                        name="" onChange={(event) => this.setName(event.target.value)}></input>
+                </div>
+                <button onClick={this.handleLoginClick} className='beginButton'>Begin</button>
             </div>
         );
     } 

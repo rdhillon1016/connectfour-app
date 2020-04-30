@@ -14,9 +14,7 @@ class BoardCell extends React.Component {
 
     render() {
         return (
-            <div onClick={this.handleClick} className={this.props.cellStatus}>
-                <p>{this.props.x} {this.props.y}</p>
-            </div>
+            <div onClick={this.handleClick} className={this.props.cellStatus} />
         )
     }
 }
