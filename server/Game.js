@@ -3,6 +3,7 @@ const BLUE = 1;
 const EMPTY = 0;
 const NUM_COLUMNS = 7;
 const NUM_ROWS = 6;
+const NO_WINNER = 0;
 
 class Game {
 
@@ -46,14 +47,19 @@ class Game {
     }
 
     checkWin() {
-        checkVertical(RED);
-        checkVertical(BLUE);
-        checkHorizontal(RED);
-        checkHorizontal(BLUE);
-        checkForwardDiagnol(RED);
-        checkForwardDiagnol(BLUE);
-        checkBackDiagnol(RED);
-        checkBackDiagnol(BLUE);
+        if (this.checkVertical(RED) || 
+                this.checkHorizontal(RED) ||
+                this.checkForwardDiagnol(RED) || 
+                this.checkBackDiagnol(RED)) {
+            return RED;
+        }
+        if (this.checkVertical(BLUE) || 
+                this.checkHorizontal(BLUE) ||
+                this.checkForwardDiagnol(BLUE) || 
+                this.checkBackDiagnol(BLUE)) {
+            return BLUE;
+        }
+        return 0;
     }
 
     checkVertical(colour) {
@@ -88,6 +94,36 @@ class Game {
             }
         }
         return false;
+    }
+
+    checkForwardDiagnol(colour) {
+        for (let j = 3; j < NUM_COLUMNS; j++) {
+            for (let i = 0; i < NUM_ROWS - 3; i++) {
+                for (let count = 0; count < 4; count++) {
+                    if (this.board[i + count][j - count] !== colour) {
+                        break;
+                    }
+                    if (count === 3) {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    checkBackwardDiagnol(colour) {
+        for (let j = 0; j < NUM_COLUMNS - 3; j++) {
+            for (let i = 0; i < NUM_ROWS - 3; i++) {
+                for (let count = 0; count < 4; count++) {
+                    if (this.board[i + count][j + count] !== colour) {
+                        break;
+                    }
+                    if (count === 3) {
+                        return true;
+                    }
+                }
+            }
+        }
     }
 }
 
