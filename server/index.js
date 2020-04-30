@@ -22,8 +22,12 @@ let usersInGame = {};
 let numGames = -1;
 let games = [];
 
-const BLUE = 1;
 const RED = -1;
+const BLUE = 1;
+const EMPTY = 0;
+const NUM_COLUMNS = 7;
+const NUM_ROWS = 6;
+const NO_WINNER = 0;
 
 
 io.on('connection', (socket) => {
@@ -78,15 +82,24 @@ io.on('connection', (socket) => {
             let turn = gameObj.turn;
             if ((turn === BLUE && game.bluePlayer === socket.id) ||
                 (turn === RED && game.redPlayer === socket.id)) {
-                    game.playTurn(row, col);
-                    io.to(game.redPlayer).emit('update board', move);
-                    io.to(game.bluePlayer).emit('update board', move);
-                    const potentialWinner = game.checkWin();
-                    if (potentialWinner !== 0) {
-                        emitWin(game, potentialWinner);
-                        movePlayersBackToMain(game);
-                    }
+                let colour;
+                if (turn === BLUE) {
+                    colour = "blueCell"
+                } else {
+                    colour = "redCell"
                 }
+                let emissionObj = { colour, row }
+                gameObj.playTurn(row, col);
+                io.to(game.redPlayer).emit(`update column ${col}`, emissionObj);
+                io.to(game.bluePlayer).emit(`update column ${col}`, emissionObj);
+                if (gameObj.numFilledBoxes === NUM_ROWS * NUM_COLUMNS) {
+                    executeTieProcedure(game);
+                }
+                const potentialWinner = gameObj.checkWin();
+                if (potentialWinner !== 0) {
+                    executeWinProcedure(game, potentialWinner)
+                }
+            }
         }
     })
 
@@ -103,9 +116,9 @@ io.on('connection', (socket) => {
                 }
                 numGames++;
                 games.push(gameObj);
-                usersInGame[socket.id] = {name: usersInMain[socket.id], gameNum: numGames};
+                usersInGame[socket.id] = { name: usersInMain[socket.id], gameNum: numGames };
                 removeUserFromMain(socket.id);
-                usersInGame[id] = {name: usersInMain[id], gameNum: numGames};
+                usersInGame[id] = { name: usersInMain[id], gameNum: numGames };
                 removeUserFromMain(id);
                 io.emit('updated users', getUsernames());
                 console.log(games.length);
@@ -115,6 +128,31 @@ io.on('connection', (socket) => {
     })
 });
 
+function executeWinProcedure(game, winner) {
+    emitWin(game, potentialWinner);
+    movePlayersBackToMain(game);
+    updateUsersList(idOne);
+    updateUsersList(idTwo);
+}
+
+function executeTieProcedure(game) {
+    let idOne = game.bluePlayer;
+    let idTwo = game.redPlayer;
+    emitTie(game);
+    movePlayersBackToMain(game);
+    updateUsersList(idOne);
+    updateUsersList(idTwo);
+}
+
+function updateUsersList(id) {
+    io.to(id).emit('updated users', getUsernames());
+}
+
+function emitTie(game) {
+    io.to(game.bluePlayer).emit('end game tie', usersInGame[game.bluePlayer].name);
+    io.to(game.redPlayer).emit('end game tie', usersInGame[game.redPlayer].name);
+}
+
 function emitWin(game, winner) {
     if (winner === BLUE) {
         io.to(game.bluePlayer).emit('end game winner', (usersInGame[game.bluePlayer].name));
@@ -123,6 +161,8 @@ function emitWin(game, winner) {
         io.to(game.redPlayer).emit('end game winner', (usersInGame[game.redPlayer].name));
         io.to(game.bluePlayer).emit('end game', (usersInGame[game.bluePlayer].name));
     }
+    io.to(game.bluePlayer).emit('updated users', getUsernames());
+    io.to(game.bluePlayer).emit('updated users', getUsernames());
 }
 
 function movePlayersBackToMain(game) {
@@ -150,7 +190,7 @@ function findGame(id) {
         const gameNum = usersInGame[id].gameNum;
         if (gameNum < games.length) {
             return games[gameNum];
-        } 
+        }
     }
     return -1;
 }

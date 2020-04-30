@@ -10,6 +10,7 @@ class Game {
     // [0][0] on board represents top left
     board;
     turn;
+    numFilledBoxes;
 
     constructor() {
         this.board = this.initBoard();
@@ -29,12 +30,12 @@ class Game {
 
     playTurn(row, col) {
         if (row >= NUM_ROWS || col >= NUM_COLUMNS) {
-            return;
         }
         if ((row + 1 === NUM_ROWS) || this.board[row + 1][col] !== 0) {
-            this.board[row][col] = turn;
+            this.board[row][col] = this.turn;
 
             this.switchTurn();
+            this.numFilledBoxes++;
         }
     }
 
@@ -50,16 +51,16 @@ class Game {
         if (this.checkVertical(RED) || 
                 this.checkHorizontal(RED) ||
                 this.checkForwardDiagnol(RED) || 
-                this.checkBackDiagnol(RED)) {
+                this.checkBackwardDiagnol(RED)) {
             return RED;
         }
         if (this.checkVertical(BLUE) || 
                 this.checkHorizontal(BLUE) ||
                 this.checkForwardDiagnol(BLUE) || 
-                this.checkBackDiagnol(BLUE)) {
+                this.checkBackwardDiagnol(BLUE)) {
             return BLUE;
         }
-        return 0;
+        return NO_WINNER;
     }
 
     checkVertical(colour) {

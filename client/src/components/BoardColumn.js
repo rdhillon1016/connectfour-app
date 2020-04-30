@@ -9,14 +9,24 @@ class BoardColumn extends React.Component {
         this.state = {cellStates: ["emptyCell", "emptyCell", "emptyCell", "emptyCell", "emptyCell", "emptyCell"]};
     }
 
+    componentDidMount() {
+        const socket = this.props.socket;
+        socket.on(`update column ${this.props.colNum}`, (moveInfo) => {
+            const row = moveInfo.row;
+            const colour = moveInfo.cell;
+            if (row > -1 && row < 6) {
+                let newCellStates = [...this.state.cellStates];
+                newCellStates[row] = colour;
+                this.setState({cellStates: newCellStates});
+            }
+        })
+    }
+
     handleClick() {
-        console.log("called");
-        const emptyCellNum = this.findLowestEmptyCell();
-        console.log(emptyCellNum);
-        if (emptyCellNum > -1 && emptyCellNum < 6) {
-            let newCellStates = [...this.state.cellStates];
-            newCellStates[emptyCellNum] = "redCell";
-            this.setState({cellStates: newCellStates});
+        const socket = this.props.socket;
+        const row = this.findLowestEmptyCell();
+        if (row >= 0) {
+            socket.emit('play turn', {row, col: this.props.colNum});
         }
     }
 
