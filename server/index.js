@@ -24,10 +24,8 @@ let games = [];
 
 const RED = -1;
 const BLUE = 1;
-const EMPTY = 0;
 const NUM_COLUMNS = 7;
 const NUM_ROWS = 6;
-const NO_WINNER = 0;
 
 
 io.on('connection', (socket) => {
@@ -51,7 +49,7 @@ io.on('connection', (socket) => {
             removeUserFromGame(socket.id);
         }
 
-        io.emit('updated users', getUsernames());
+        updateAllUserLists();
     });
 
     socket.on('register user', (username) => {
@@ -129,19 +127,19 @@ io.on('connection', (socket) => {
 });
 
 function executeWinProcedure(game, winner) {
-    emitWin(game, potentialWinner);
+    emitWin(game, winner);
     movePlayersBackToMain(game);
-    updateUsersList(idOne);
-    updateUsersList(idTwo);
+    updateAllUserLists()
 }
 
 function executeTieProcedure(game) {
-    let idOne = game.bluePlayer;
-    let idTwo = game.redPlayer;
     emitTie(game);
     movePlayersBackToMain(game);
-    updateUsersList(idOne);
-    updateUsersList(idTwo);
+    updateAllUserLists()
+}
+
+function updateAllUserLists() {
+    io.emit('updated users', getUsernames())
 }
 
 function updateUsersList(id) {
