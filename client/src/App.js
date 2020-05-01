@@ -29,18 +29,19 @@ class App extends React.Component {
       this.setState({ view: <Game socket={socket} name={username} /> })
     })
 
-    socket.on('end game', (username) => {
+    socket.on('return user to lobby', (username) => {
       this.setState({ view: <JoinGame socket={socket} name={username} /> })
+    })
+
+    socket.on('end game', () => {
       alert("You lost the game and you're bad")
     })
 
-    socket.on('end game tie', (username) => {
-      this.setState({ view: <JoinGame socket={socket} name={username} /> })
+    socket.on('end game tie', () => {
       alert("You tied. Both trash.")
     })
 
-    socket.on('end game winner', (username) => {
-      this.setState({ view: <JoinGame socket={socket} name={username} /> })
+    socket.on('end game winner', () => {
       alert("You won the game you beast");
     })
   }

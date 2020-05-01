@@ -19,6 +19,7 @@ server.listen(PORT, () => console.log(`Started on port ${PORT}`));
 
 let usersInMain = {};
 let usersInGame = {};
+let allUsers = {};
 let numGames = -1;
 let games = [];
 
@@ -40,21 +41,31 @@ io.on('connection', (socket) => {
         } else if (isUserInGame(socket.id)) {
             let id = findOpponent(socket.id);
             if (id != -1) {
-                const name = usersInGame[id].name;
-                io.to(id).emit('end game winner', name);
-                usersInMain[id] = name;
+                io.to(id).emit('end game winner');
                 removeGame(id);
                 removeUserFromGame(id);
             }
             removeUserFromGame(socket.id);
         }
-
+        delete allUsers[socket.id];
         updateAllUserLists();
     });
 
+    socket.on('return lobby click', () => {
+        if (allUsers.hasOwnProperty(socket.id)) {
+            if (usersInGame.hasOwnProperty(socket.id)) {
+                endGameAbruptly(socket);
+            }
+            io.to(socket.id).emit('return user to lobby');
+            usersInMain[socket.id] = allUsers[socket.id];
+            updateAllUserLists();
+        }
+    })
+
     socket.on('register user', (username) => {
-        if (!usersInMain.hasOwnProperty(socket.id) && findSocketID(username) === 0) {
+        if (!allUsers.hasOwnProperty(socket.id) && findSocketID(username) === 0) {
             usersInMain[socket.id] = username;
+            allUsers[socket.id] = username;
         } else {
             return;
         }
@@ -127,15 +138,25 @@ io.on('connection', (socket) => {
     })
 });
 
+function endGameAbruptly(socket) {
+    let game = findGame(socket.id);
+    if (game !== -1) {
+        let idTwo = findOpponent(socket.id);
+        removePlayersFromUsersInGame(game);
+        io.to(socket.id).emit('return user to lobby', allUsers[socket.id]);
+        io.to(idTwo).emit('end game winner', allUsers[socket.id]);
+    }
+}
+
 function executeWinProcedure(game, winner) {
     emitWin(game, winner);
-    movePlayersBackToMain(game);
+    removePlayersFromUsersInGame(game);
     updateAllUserLists()
 }
 
 function executeTieProcedure(game) {
     emitTie(game);
-    movePlayersBackToMain(game);
+    removePlayersFromUsersInGame(game);
     updateAllUserLists()
 }
 
@@ -164,10 +185,8 @@ function emitWin(game, winner) {
     io.to(game.bluePlayer).emit('updated users', getUsernames());
 }
 
-function movePlayersBackToMain(game) {
+function removePlayersFromUsersInGame(game) {
     removeGame(game.redPlayer);
-    usersInMain[game.redPlayer] = usersInGame[game.redPlayer].name;
-    usersInMain[game.bluePlayer] = usersInGame[game.bluePlayer].name;
     delete usersInGame[game.redPlayer];
     delete usersInGame[game.bluePlayer];
 }
