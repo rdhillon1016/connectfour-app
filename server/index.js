@@ -3,6 +3,7 @@ const Game = require('./Game.js');
 const express = require('express');
 const socket = require('socket.io');
 const http = require('http');
+const cors = require('cors');
 
 const PORT = process.env.PORT || 5000;
 
@@ -14,6 +15,7 @@ const server = http.createServer(app);
 const io = socket(server);
 
 app.use(router);
+app.use(cors());
 
 server.listen(PORT, () => console.log(`Started on port ${PORT}`));
 

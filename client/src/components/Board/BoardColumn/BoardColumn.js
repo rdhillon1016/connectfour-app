@@ -47,7 +47,6 @@ class BoardColumn extends React.Component {
     }
 
     render() {
-        console.log("render called");
         let cells = [];
         for (let x = 0; x < 6; x++) {
             cells.push(<BoardCell cellStatus={this.state.cellStates[x]} key={x} x={x} y={this.props.colNum} />)

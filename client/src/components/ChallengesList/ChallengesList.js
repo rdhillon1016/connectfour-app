@@ -17,13 +17,11 @@ class ChallengesList extends React.Component {
             if (!this.state.names.includes(name)) {
                 let newNames = [name, ...this.state.names];
                 this.setState({names: newNames});
-                console.log(this.state.names);
             }
         });
 
         socket.on('update challenges', (name) => {
             let index = this.state.names.findIndex((n) => n === name);
-            console.log(index);
             if (index >= 0) {
                 let newNames = [...this.state.names];
                 newNames.splice(index, 1);

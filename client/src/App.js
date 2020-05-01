@@ -18,7 +18,6 @@ class App extends React.Component {
   componentDidMount() {
     const socket = io(ENDPOINT);
     this.setState({ socket });
-    socket.on('connect', () => console.log(`connected: ${socket.id}`));
     this.setState({ view: <Login socket={socket} /> })
 
     socket.on('successful registration', (username) => {
