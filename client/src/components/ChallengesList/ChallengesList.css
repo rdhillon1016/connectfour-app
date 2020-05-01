@@ -6,7 +6,9 @@
     padding-top: 3%;
     padding-bottom: 3%;
     text-align: center;
-    height: 80%
+    height: 80%;
+    overflow-y: auto;
+    overflow-x: hidden;
 
 }
 
