@@ -35,20 +35,22 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log(`Disconnection: ${socket.id}`);
 
-        if (isUserInMain(socket.id)) {
-            removeUserFromMain(socket.id);
-            io.emit('updated users', getUsernames());
-        } else if (isUserInGame(socket.id)) {
-            let id = findOpponent(socket.id);
-            if (id != -1) {
-                io.to(id).emit('end game winner');
-                removeGame(id);
-                removeUserFromGame(id);
+        if (allUsers.hasOwnProperty(socket.id)) {
+            if (isUserInMain(socket.id)) {
+                removeUserFromMain(socket.id);
+                io.emit('updated users', getUsernames());
+            } else if (isUserInGame(socket.id)) {
+                let id = findOpponent(socket.id);
+                if (id != -1) {
+                    io.to(id).emit('end game winner');
+                    removeGame(id);
+                    removeUserFromGame(id);
+                }
+                removeUserFromGame(socket.id);
             }
-            removeUserFromGame(socket.id);
+            delete allUsers[socket.id];
+            updateAllUserLists();
         }
-        delete allUsers[socket.id];
-        updateAllUserLists();
     });
 
     socket.on('return lobby click', () => {
@@ -56,7 +58,7 @@ io.on('connection', (socket) => {
             if (usersInGame.hasOwnProperty(socket.id)) {
                 endGameAbruptly(socket);
             }
-            io.to(socket.id).emit('return user to lobby');
+            io.to(socket.id).emit('return user to lobby', allUsers[socket.id]);
             usersInMain[socket.id] = allUsers[socket.id];
             updateAllUserLists();
         }
