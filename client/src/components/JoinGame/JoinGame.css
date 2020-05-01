@@ -1,0 +1,21 @@
+.joinContainer {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.usernameBox {
+   width: 100%;
+   height: 8%;
+   text-align: left;
+   font-size: 130%;
+   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+   color: bisque;
+}
+
+.listsContainer {
+    display: inline-block;
+    width: 70%;
+    height: 92%;
+    text-align: center;
+}

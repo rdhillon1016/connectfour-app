@@ -2,6 +2,8 @@ import React from 'react';
 
 import NameButton from '../NameButton/NameButton';
 
+import './NamesList.css';
+
 class NamesList extends React.Component {
 
     constructor(props) {
@@ -28,7 +30,10 @@ class NamesList extends React.Component {
             }
         )
         return (
-            <div>{listItems}</div>
+            <div className='namesListContainer'>
+                <div className='namesListTitle'>Online Users (Click to challenge)</div>
+                <div className='namesListBox'>{listItems}</div>
+            </div>
         )
      }
 }

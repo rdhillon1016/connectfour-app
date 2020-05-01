@@ -1,7 +1,8 @@
 .board {
-    width: 84vh;
-    height: 72vh;
-    display: flex;
+    width: 43%;
+    height: 65%;
+    display: inline-block;
     justify-content: center;
     align-items: center;
+    background-color: bisque;
 }

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './NameButton.css';
+
 class NameButton extends React.Component {
 
     constructor(props) {
@@ -15,7 +17,7 @@ class NameButton extends React.Component {
 
     render() {
         return (
-            <button onClick = {this.handleButtonClick}>{this.props.name}</button>
+            <button className='nameButton' onClick = {this.handleButtonClick}>{this.props.name}</button>
         )
     }
 }

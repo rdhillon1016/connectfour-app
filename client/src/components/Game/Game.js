@@ -1,13 +1,17 @@
 import React from 'react';
 
 import Board from '../Board/Board.js'
+import './Game.css';
+import '../JoinGame/JoinGame.css'
 
 class Game extends React.Component {
     
     render() {
         return (
-            <div>
-                <h1>{this.props.name}</h1>
+            <div className='gameContainer'>
+                <div className='usernameBox'>
+                    Username: {this.props.name}
+                </div>
                 <Board socket={this.props.socket} />
             </div>
         );

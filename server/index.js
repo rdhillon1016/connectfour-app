@@ -53,8 +53,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('register user', (username) => {
-        if (!usersInMain.hasOwnProperty(socket.id)) {
+        if (!usersInMain.hasOwnProperty(socket.id) && findSocketID(username) === 0) {
             usersInMain[socket.id] = username;
+        } else {
+            return;
         }
         io.to(socket.id).emit('successful registration', username);
         io.emit('updated users', getUsernames());

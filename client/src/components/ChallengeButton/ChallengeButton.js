@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ChallengeButton.css';
+
 class ChallengeButton extends React.Component {
 
     constructor(props) {
@@ -15,7 +17,7 @@ class ChallengeButton extends React.Component {
 
     render() {
         return (
-            <button onClick = {this.handleButtonClick}>Click to accept challenge from {this.props.name}</button>
+            <button className='challengeButton' onClick = {this.handleButtonClick}>Invite from {this.props.name}</button>
         )
     }
 }

@@ -1,19 +1,23 @@
 .emptyCell {
-    border: solid 1px black;
-    width: 12vh;
-    height: 12vh;
+    width: 95%;
+    height: 16%;
+    border-radius: 50%;
+    background-color: #181a18;
+    margin-top: 1%;
 }
 
 .redCell {
-    border: solid 1px black;
+    width: 95%;
+    height: 16%;
+    border-radius: 50%;
     background-color: darkred;
-    width: 12vh;
-    height: 12vh;
+    margin-top: 1%;
 }
 
 .blueCell {
-    border: solid 1px black;
-    background-color: darkblue;
-    width: 12vh;
-    height: 12vh;
+    width: 95%;
+    height: 16%;
+    border-radius: 50%;
+    background-color: navy;
+    margin-top: 1%;
 }

@@ -1,11 +1,11 @@
 .beginButton {
-    padding: 1vh;
-    color: burlywood;
+    padding: 2%;
+    color: bisque;
     background-color: #383838;
-    border-color: burlywood;
-    width: 14vh;
+    border-color: bisque;
+    width: 35%;
     font-family: serif;
-    font-size: 3vh;
+    font-size: 120%;
 }
 
 .inputContainer {
@@ -15,13 +15,13 @@
 .inputBox {
     text-align: center;
     display: inline-block;
-    padding: 5px;
+    padding: 1%;
     font-size: 20px
 }
 
 .displayName {
-    height: 5vh;
-    font-size: 4vh;
+    height: 190%;
+    font-size: 150%;
     color: bisque;
     text-align: center;
     font-family: serif;

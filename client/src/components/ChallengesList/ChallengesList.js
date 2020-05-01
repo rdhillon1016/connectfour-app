@@ -2,6 +2,8 @@ import React from 'react';
 
 import ChallengeButton from '../ChallengeButton/ChallengeButton.js';
 
+import './ChallengesList.css';
+
 class ChallengesList extends React.Component {
     constructor(props) {
         super(props)
@@ -21,10 +23,11 @@ class ChallengesList extends React.Component {
 
         socket.on('update challenges', (name) => {
             let index = this.state.names.findIndex((n) => n === name);
+            console.log(index);
             if (index >= 0) {
                 let newNames = [...this.state.names];
                 newNames.splice(index, 1);
-                this.setState(newNames);
+                this.setState({names: newNames});
             }
         })
     }
@@ -42,7 +45,10 @@ class ChallengesList extends React.Component {
             }
         )
         return (
-            <div>{listItems}</div>
+            <div className='challengesListContainer'>
+                <div className='challengesListTitle'>Invites (Click to accept)</div>
+                <div className='challengesListBox'>{listItems}</div>
+            </div>
         )
      }
 }

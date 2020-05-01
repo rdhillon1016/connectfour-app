@@ -3,18 +3,10 @@ import "./BoardCell.css";
 
 class BoardCell extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.handleClick.bind(this);
-    }
-
-    handleClick() {
-
-    }
-
     render() {
         return (
-            <div onClick={this.handleClick} className={this.props.cellStatus} />
+            <div className={this.props.cellStatus}>
+            </div>
         )
     }
 }

@@ -7,10 +7,10 @@
 }
 
 .appContainer {
-    height: 100vh;
+    height: 100%;
 }
 
 .viewContainer {
-    height: 100vh;
+    height: 100%;
     text-align: center;
 }

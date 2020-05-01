@@ -3,15 +3,21 @@ import React from 'react';
 import NamesList from '../NamesList/NamesList.js';
 import ChallengesList from '../ChallengesList/ChallengesList.js'
 
+import './JoinGame.css';
+
 
 class JoinGame extends React.Component {
 
     render() {
         return (
-            <div>
-                <h1>{this.props.name}</h1>
-                <NamesList socket={this.props.socket} />
-                <ChallengesList socket={this.props.socket} />
+            <div className='joinContainer'>
+                <div className='usernameBox'>
+                    Username: {this.props.name}
+                </div>
+                <div className='listsContainer'>
+                    <NamesList socket={this.props.socket} />
+                    <ChallengesList socket={this.props.socket} />
+                </div>
             </div>
         )
     }

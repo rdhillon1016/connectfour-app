@@ -24,7 +24,7 @@ class Login extends React.Component {
     render () {
         return (
             <div className='loginContainer'>
-                <div className='displayName'>Choose a Display Name</div>
+                <div className='displayName'>Choose a display name.</div>
                 <div className='inputContainer'>
                     <input className='inputBox' type="text"
                         name="" onChange={(event) => this.setName(event.target.value)}></input>
