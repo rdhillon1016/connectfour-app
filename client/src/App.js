@@ -6,7 +6,7 @@ import JoinGame from './components/JoinGame/JoinGame';
 import Game from './components/Game/Game';
 import Login from './components/Login/Login';
 
-const ENDPOINT = 'http://localhost:5000';
+const ENDPOINT = 'https://connectfour-app.herokuapp.com/';
 
 class App extends React.Component {
   constructor() {
